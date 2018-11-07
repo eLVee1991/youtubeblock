@@ -25,3 +25,11 @@ For now it searches the logs for:
 - .sn-
 
 as described in https://discourse.pi-hole.net/t/how-do-i-block-ads-on-youtube/253/237
+
+
+
+run this command on pihole (over ssh):
+- git clone https://github.com/eLVee1991/youtubeblock.git
+- pip install pexpect
+- python youtubeblock.py
+
