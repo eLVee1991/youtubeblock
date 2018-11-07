@@ -33,8 +33,31 @@ prefix = [
 ".sn-"
 ]
 
+class colors:
+    """
+    Class specifically for 
+    """
+    UNDERLINE = '\033[4m'
+    RED = '\033[91m'
+    GREEN = '\033[92m'
+    BOLD = '\033[1m'
+    END = '\033[0m'
+
+def message(state, msg):
+    if state == "underline":
+        print(colors.UNDERLINE + msg + colors.END)
+    elif state == "green":
+        print(colors.GREEN + msg + colors.END)
+    elif state == "red":
+        print(colors.RED + msg + colors.END)
+    elif state == "bold":
+        print(colors.BOLD + msg + colors.END)
+    else:
+        print("Wrong state. Please try: 'underline', 'green', 'red'")
+
+
 def text():
-    print("""
+    message("red", """
 Yb  dP .d88b. 8    8 88888 8    8 888b. 8888 
  YbdP  8P  Y8 8    8   8   8    8 8wwwP 8www 
   YP   8b  d8 8b..d8   8   8b..d8 8   b 8    
@@ -45,8 +68,8 @@ Yb  dP .d88b. 8    8 88888 8    8 888b. 8888
     8  8 8 8' .8 8    88b  8 8 `Yb.  8        
     88P' 8 `Y8P' `Y8P 8 Yb 8 8 Y88P  Y8P      
 """)
-    print("Pihole unique YouTube advertisement url checker")
-    print("Created by eLVee")
+    message("underline", "Pihole unique YouTube advertisement url checker")
+    message("underline", "Created by eLVee")
     print("")
 
 def check_raw():
@@ -55,7 +78,7 @@ def check_raw():
     Saves the raw data that needs to be sorting to 'youtube_raw_addlist.log'
     """
     output_filename = os.path.normpath("youtube_raw_addlist.log")
-    print("[+] Checking for youtube fingerprint..")
+    message("green", "[+] Checking for youtube fingerprint..")
     for url in prefix:
         line_regex = re.compile(r".*"+url+".*$")
         with open(output_filename, "a+") as out_file:
@@ -137,16 +160,17 @@ def delete_logs():
 
 
 text()
-print("[+] Checking all dns requests for YouTube queries.")
+message("green", "[+] Checking all dns requests for YouTube queries.")
 check_raw()
-print("[+] Done checking requests.")
-print("[+] Sorting urls..")
+message("bold", "[+] Done checking requests.")
+message("green", "[+] Sorting urls..")
 query_list()
-print("[+] Done sorting urls for queries.")
-print("[+] Sorting for unique urls and adding to list 'blocklist.txt'..")
+message("bold", "[+] Done sorting urls for queries.")
+message("green", "[+] Sorting for unique urls and adding to list 'blocklist.txt'..")
 blocklist()
-print("[+] Done adding to blocklist.")
+message("bold", "[+] Done adding to blocklist.")
+message("green", "[+] Adding contents of blocklist to pihole.")
 add_to_pihole()
-print("[+] Done adding to pihole.")
-print("[+] Finished.")
+message("bold", "[+] Done adding to pihole.")
+message("bold", "[+] Finished.")
 delete_logs()
