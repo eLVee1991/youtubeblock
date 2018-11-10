@@ -104,8 +104,10 @@ def query_list():
         with open("youtube_raw_addlist.log", "r") as in_file:
             for line in in_file:
                 if (line_regex.search(line)) and "googlevideo.com" in line:
-                     #print line[65:97]
-                    out_file.write(line[65:97]+"\n")
+                    #print line[65:97]
+                    thisline = line.split("A] ")
+                    thisline = thisline[1].split(" from")
+                    out_file.write(thisline[0]+"\n")
                 else:
                     #print(url+" not found trying again")
                     continue
