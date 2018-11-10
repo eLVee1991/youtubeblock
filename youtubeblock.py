@@ -35,7 +35,8 @@ prefix = [
 
 class colors:
     """
-    Class specifically for 
+    Class specifically for message fuction below.
+    Contains colors and fonts.
     """
     UNDERLINE = '\033[4m'
     RED = '\033[91m'
@@ -44,6 +45,9 @@ class colors:
     END = '\033[0m'
 
 def message(state, msg):
+    """
+    Function that creates print statements with fonts and colors.
+    """
     if state == "underline":
         print(colors.UNDERLINE + msg + colors.END)
     elif state == "green":
@@ -104,8 +108,9 @@ def query_list():
         with open("youtube_raw_addlist.log", "r") as in_file:
             for line in in_file:
                 if (line_regex.search(line)) and "googlevideo.com" in line:
-                     #print line[65:97]
-                    out_file.write(line[65:97]+"\n")
+                    words = line.split(" ")
+                    #print words[8]
+                    out_file.write(words[8]+" ")
                 else:
                     #print(url+" not found trying again")
                     continue
@@ -137,13 +142,12 @@ def add_to_pihole():
     Uploads the contents of 'blocklist.txt' to the pihole with the command pihole -b
     """
     with open("blocklist.txt", 'r') as in_file:
-        #in_file.readlines()
-        for line in in_file:
-            #print("[+] Adding "+line+" to pihole.")
-            command = p.spawnu("pihole -b "+line)
-            command.interact()
-            #print("[+] Done.")
-            command.close()
+        line = in_file.read()
+        #print("[+] Adding "+line+" to pihole.")
+        command = p.spawnu("pihole -b "+line)
+        command.interact()
+        #print("[+] Done.")
+        command.close()
     in_file.close()
 
 def delete_logs():
