@@ -148,6 +148,9 @@ def add_to_pihole():
         command.interact()
         #print("[+] Done.")
         command.close()
+        command = p.spawnu("pihole restartdns")
+        command.interact()
+        command.close()
     in_file.close()
 
 def delete_logs():
@@ -163,6 +166,7 @@ def delete_logs():
     command.close()
 
 
+
 text()
 message("green", "[+] Checking all dns requests for YouTube queries.")
 check_raw()
@@ -174,7 +178,7 @@ message("green", "[+] Sorting for unique urls and adding to list 'blocklist.txt'
 blocklist()
 message("bold", "[+] Done adding to blocklist.")
 message("green", "[+] Adding contents of blocklist to pihole.")
-#add_to_pihole()
+add_to_pihole()
 message("bold", "[+] Done adding to pihole.")
 message("bold", "[+] Finished.")
-#delete_logs()
+delete_logs()
