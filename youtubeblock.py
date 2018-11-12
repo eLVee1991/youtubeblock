@@ -86,7 +86,7 @@ def check_raw():
     for url in prefix:
         line_regex = re.compile(r".*"+url+".*$")
         with open(output_filename, "a+") as out_file:
-            with open("/var/log/pihole.log", "r") as in_file:
+            with open("/Users/elvee/Desktop/pihole.log", "r") as in_file:
                 for line in in_file:
                     if (line_regex.search(line)):
                         #print line
@@ -110,7 +110,7 @@ def query_list():
                 if (line_regex.search(line)) and "googlevideo.com" in line:
                     words = line.split(" ")
                     #print words[8]
-                    out_file.write(words[8]+" ")
+                    out_file.write(words[8]+"\n")
                 else:
                     #print(url+" not found trying again")
                     continue
@@ -132,7 +132,7 @@ def blocklist():
                 pass
             else:
                 with open('blocklist.txt', "a") as out_file:
-                    out_file.write(line)
+                    out_file.write(line.rstrip()+" ")
                 out_file.close()
         in_file.close()
     
@@ -174,7 +174,7 @@ message("green", "[+] Sorting for unique urls and adding to list 'blocklist.txt'
 blocklist()
 message("bold", "[+] Done adding to blocklist.")
 message("green", "[+] Adding contents of blocklist to pihole.")
-add_to_pihole()
+#add_to_pihole()
 message("bold", "[+] Done adding to pihole.")
 message("bold", "[+] Finished.")
-delete_logs()
+#delete_logs()
