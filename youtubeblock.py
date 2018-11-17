@@ -141,7 +141,7 @@ def add_to_pihole():
                     #print(line)
                     urls.append(line.rstrip()+" ")
         all_urls = "".join(urls)  
-        print("[+] Adding "+line.rstrip()+" "+" to pihole.")
+        #print("[+] Adding "+line.rstrip()+" "+" to pihole.")
         command = p.spawnu("pihole -b "+all_urls)
         command.interact()
         #print("[+] Done.")
