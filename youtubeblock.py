@@ -8,6 +8,11 @@ except ImportError:
     print("[+] Pexpect not installed. Please run: 'pip install pexpect' in command line.")
     exit()
 
+raw_addlist = "youtube_raw_addlist.log"
+all_queries = "all_queries.log"
+blocklist = "blocklist.txt"
+logfile = "/var/log/pihole.log"
+    
 # Regex used to match relevant loglines (in this case, a specific IP address)
 prefix = [
 "r1---sn-",
@@ -81,12 +86,12 @@ def check_raw():
     Checks the pihole logs for the prefix var above. 
     Saves the raw data that needs to be sorting to 'youtube_raw_addlist.log'
     """
-    output_filename = os.path.normpath("youtube_raw_addlist.log")
+    output_filename = os.path.normpath(raw_addlist)
     message("green", "[+] Checking for youtube fingerprint..")
     for url in prefix:
         line_regex = re.compile(r".*"+url+".*$")
         with open(output_filename, "a+") as out_file:
-            with open("/Users/elvee/Desktop/pihole.log", "r") as in_file:
+            with open(logfile, "r") as in_file:
                 for line in in_file:
                     if (line_regex.search(line)):
                         #print line
@@ -102,10 +107,10 @@ def query_list():
     Checks 'youtube_raw_addlist.log' for the word 'query', so we know for sure it's outgoing.
     Then saves that data to 'all_queries.log' for further sorting.
     """
-    output_filename = os.path.normpath("all_queries.log")
+    output_filename = os.path.normpath(all_queries)
     line_regex = re.compile(r".*"+"query"+".*$")
     with open(output_filename, "a+") as out_file:
-        with open("youtube_raw_addlist.log", "r") as in_file:
+        with open(raw_addlist, "r") as in_file:
             for line in in_file:
                 if (line_regex.search(line)) and "googlevideo.com" in line:
                     words = line.split(" ")
@@ -124,9 +129,9 @@ def blocklist():
     Check the the file 'all_queries.log' for unique urls and sorts them.
     Then check the blocklist.txt if the urls is already present. If not, adds it. 
     """
-    uniquelines = set(open("all_queries.log").readlines())
+    uniquelines = set(open(all_queries).readlines())
     for line in uniquelines:
-        with open('blocklist.txt', "r+") as in_file:
+        with open(blocklist, "r+") as in_file:
             if line in in_file:
                 #print("> "+line+" Already in 'blocklist.txt'.")
                 pass
@@ -141,7 +146,7 @@ def add_to_pihole():
     """
     Uploads the contents of 'blocklist.txt' to the pihole with the command pihole -b
     """
-    with open("blocklist.txt", 'r') as in_file:
+    with open(blocklist, 'r') as in_file:
         line = in_file.read()
         #print("[+] Adding "+line+" to pihole.")
         command = p.spawnu("pihole -b "+line)
