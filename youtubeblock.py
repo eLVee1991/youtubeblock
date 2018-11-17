@@ -142,13 +142,16 @@ def add_to_pihole():
                     urls.append(line.rstrip()+" ")
         all_urls = "".join(urls)  
         #print("[+] Adding "+line.rstrip()+" "+" to pihole.")
-        command = p.spawnu("pihole -b "+all_urls)
-        command.interact()
-        #print("[+] Done.")
-        command.close()
-        command1 = p.spawnu("pihole restartdns")
-        command1.interact()
-        command1.close()
+        if all_urls:    
+            command = p.spawnu("pihole -b "+all_urls)
+            command.interact()
+            #print("[+] Done.")
+            command.close()
+            command1 = p.spawnu("pihole restartdns")
+            command1.interact()
+            command1.close()
+        else:
+            message("bold", "[+] No urls to add.")
     in_file.close()
 
 def delete_logs():
