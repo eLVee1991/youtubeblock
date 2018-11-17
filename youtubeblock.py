@@ -12,6 +12,7 @@ raw_addlist = "youtube_raw_addlist.log"
 pihole_log = "/var/log/pihole.log"
 all_queries = "all_queries.log"
 block_list = "blocklist.txt"
+black_list = "/etc/pihole/blacklist.txt"
 prefix = []
 
 # Regex used to match relevant loglines (in this case, to create an part of an IP like r1---sn- etc.)
@@ -120,9 +121,7 @@ def blocklist():
                 pass
             else:
                 with open(block_list, "a") as out_file:
-                    line = line.rstrip()
-                    line = line+" "
-                    print line
+                    #print(line+"\n")
                     out_file.write(line)
                 out_file.close()
         in_file.close()
@@ -132,10 +131,18 @@ def add_to_pihole():
     """
     Uploads the contents of 'blocklist.txt' to the pihole with the command pihole -b
     """
+    urls = []
     with open(block_list, 'r') as in_file:
-        line = in_file.read()
-        #print("[+] Adding "+line+" to pihole.")
-        command = p.spawnu("pihole -b "+line)
+        for line in in_file:
+            with open(black_list, "r") as in_file2:
+                if line in in_file2:
+                    pass
+                else:
+                    #print(line)
+                    urls.append(line.rstrip()+" ")
+        all_urls = "".join(urls)  
+        print("[+] Adding "+line.rstrip()+" "+" to pihole.")
+        command = p.spawnu("pihole -b "+all_urls)
         command.interact()
         #print("[+] Done.")
         command.close()
@@ -149,7 +156,6 @@ def delete_logs():
     Delete the files 
     - youtube_raw_addlist.log
     - all_queries.log
-
     to keep it nice and clean.
     """
     command = p.spawnu("rm -rf youtube_raw_addlist.log all_queries.log")
