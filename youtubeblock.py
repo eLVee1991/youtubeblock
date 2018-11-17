@@ -131,12 +131,12 @@ def blocklist():
     """
     uniquelines = set(open(all_queries).readlines())
     for line in uniquelines:
-        with open(blocklist, "r+") as in_file:
+        with open(blocklist, "r") as in_file:
             if line in in_file:
                 #print("> "+line+" Already in 'blocklist.txt'.")
                 pass
             else:
-                with open('blocklist.txt', "a") as out_file:
+                with open(str(blocklist), "a") as out_file:
                     out_file.write(line.rstrip()+" ")
                 out_file.close()
         in_file.close()
