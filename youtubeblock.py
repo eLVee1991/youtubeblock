@@ -97,7 +97,7 @@ def query_list():
                 if (line_regex.search(line)) and "googlevideo.com" in line:
                     thisline = line.split("A] ")
                     thisline = thisline[1].split(" from")
-                    print(thisline[0])
+                    #print(thisline[0])
                     out_file.write(thisline[0]+"\n")
                 else:
                     #print(url+" not found trying again")
