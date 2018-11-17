@@ -9,34 +9,16 @@ except ImportError:
     exit()
 
 raw_addlist = "youtube_raw_addlist.log"
+pihole_log = "/var/log/pihole.log"
 all_queries = "all_queries.log"
-blocklist = "blocklist.txt"
-logfile = "/var/log/pihole.log"
-    
-# Regex used to match relevant loglines (in this case, a specific IP address)
-prefix = [
-"r1---sn-",
-"r2---sn-",
-"r3---sn-",
-"r4---sn-",
-"r5---sn-",
-"r6---sn-",
-"r7---sn-",
-"r8---sn-",
-"r9---sn-",
-"r10---sn-",
-"r11---sn-",
-"r12---sn-",
-"r13---sn-",
-"r14---sn-",
-"r15---sn-",
-"r16---sn-",
-"r17---sn-",
-"r18---sn-",
-"r19---sn-",
-"r20---sn-",
-".sn-"
-]
+block_list = "blocklist.txt"
+prefix = []
+
+# Regex used to match relevant loglines (in this case, to create an part of an IP like r1---sn- etc.)
+for i in range(1, 21):
+    line = ("r"+str(i)+"---sn-")
+    prefix.append(line)
+
 
 class colors:
     """
@@ -62,7 +44,7 @@ def message(state, msg):
     elif state == "bold":
         print(colors.BOLD + msg + colors.END)
     else:
-        print("Wrong state. Please try: 'underline', 'green', 'red'")
+        print("Wrong state. Please try: 'underline', 'green', 'red' or 'bold'")
 
 
 def text():
@@ -91,9 +73,9 @@ def check_raw():
     for url in prefix:
         line_regex = re.compile(r".*"+url+".*$")
         with open(output_filename, "a+") as out_file:
-            with open(logfile, "r") as in_file:
+            with open(pihole_log, "r") as in_file:
                 for line in in_file:
-                    if (line_regex.search(line)):
+                    if (line_regex.search(line)) or ".sn-" in line:
                         #print line
                         out_file.write(line)
                     else:
@@ -113,9 +95,10 @@ def query_list():
         with open(raw_addlist, "r") as in_file:
             for line in in_file:
                 if (line_regex.search(line)) and "googlevideo.com" in line:
-                    words = line.split(" ")
-                    #print words[8]
-                    out_file.write(words[8]+"\n")
+                    thisline = line.split("A] ")
+                    thisline = thisline[1].split(" from")
+                    print(thisline[0])
+                    out_file.write(thisline[0]+"\n")
                 else:
                     #print(url+" not found trying again")
                     continue
@@ -131,13 +114,16 @@ def blocklist():
     """
     uniquelines = set(open(all_queries).readlines())
     for line in uniquelines:
-        with open(blocklist, "r") as in_file:
+        with open(block_list, "r+") as in_file:
             if line in in_file:
                 #print("> "+line+" Already in 'blocklist.txt'.")
                 pass
             else:
-                with open(str(blocklist), "a") as out_file:
-                    out_file.write(line.rstrip()+" ")
+                with open(block_list, "a") as out_file:
+                    line = line.rstrip()
+                    line = line+" "
+                    print line
+                    out_file.write(line)
                 out_file.close()
         in_file.close()
     
@@ -146,16 +132,16 @@ def add_to_pihole():
     """
     Uploads the contents of 'blocklist.txt' to the pihole with the command pihole -b
     """
-    with open(blocklist, 'r') as in_file:
+    with open(block_list, 'r') as in_file:
         line = in_file.read()
         #print("[+] Adding "+line+" to pihole.")
         command = p.spawnu("pihole -b "+line)
         command.interact()
         #print("[+] Done.")
         command.close()
-        command = p.spawnu("pihole restartdns")
-        command.interact()
-        command.close()
+        command1 = p.spawnu("pihole restartdns")
+        command1.interact()
+        command1.close()
     in_file.close()
 
 def delete_logs():
@@ -169,7 +155,6 @@ def delete_logs():
     command = p.spawnu("rm -rf youtube_raw_addlist.log all_queries.log")
     command.interact()
     command.close()
-
 
 
 text()
