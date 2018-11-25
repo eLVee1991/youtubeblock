@@ -1,5 +1,6 @@
 # youtubeblock.py
 This python file will search the pihole logs for youtube advertisement urls and adds them to the blocklist.
+Run this script once a day or after seeing advertisement. 
 
 For now it searches the logs for:
 - r1---sn-
@@ -28,6 +29,7 @@ as described in https://discourse.pi-hole.net/t/how-do-i-block-ads-on-youtube/25
 
 run this command on pihole (over ssh):
 - git clone https://github.com/eLVee1991/youtubeblock.git
+- sudo apt-get install python-pip (If python2 is not pre-installed)
 - pip install pexpect
 - cd youtubeblock
 - python youtubeblock.py
