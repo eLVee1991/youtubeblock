@@ -96,10 +96,14 @@ def query_list():
         with open(raw_addlist, "r") as in_file:
             for line in in_file:
                 if (line_regex.search(line)) and "googlevideo.com" in line:
-                    thisline = line.split("A] ")
-                    thisline = thisline[1].split(" from")
-                    #print(thisline[0])
-                    out_file.write(thisline[0]+"\n")
+                    if "5hne" in line:
+                        #print("'5hne' is found in url. Probably a video. Skipping")
+                        pass
+                    else:
+                        thisline = line.split("A] ")
+                        thisline = thisline[1].split(" from")
+                        #print(thisline[0])
+                        out_file.write(thisline[0]+"\n")
                 else:
                     #print(url+" not found trying again")
                     continue
