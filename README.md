@@ -25,6 +25,8 @@ For now it searches the logs for:
 - r20---sn-
 - .sn-
 
+For me it seems that if I block all domain with "sn-5hne" in it, video's wont load. So this script skips these. Some adds will come through, but most will be blocked. Feedback is welcome!
+
 as described in https://discourse.pi-hole.net/t/how-do-i-block-ads-on-youtube/253/237
 
 run this command on pihole (over ssh):
