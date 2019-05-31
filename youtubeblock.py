@@ -8,6 +8,7 @@ except ImportError:
     print("[+] Pexpect not installed. Please run: 'pip install pexpect' in command line.")
     exit()
 
+os.path.join("~/youtubeblock")    
 raw_addlist = "youtube_raw_addlist.log"
 pihole_log = "/var/log/pihole.log"
 all_queries = "all_queries.log"
