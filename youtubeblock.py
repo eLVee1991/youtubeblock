@@ -62,6 +62,7 @@ Yb  dP .d88b. 8    8 88888 8    8 888b. 8888
 """)
     message("underline", "Pihole unique YouTube advertisement url checker")
     message("underline", "Created by eLVee")
+    message("underline", "Version 1.1")
     print("")
 
 def check_raw():
@@ -97,6 +98,9 @@ def query_list():
             for line in in_file:
                 if (line_regex.search(line)) and "googlevideo.com" in line:
                     if "5hne" in line:
+                        #print("'5hne' is found in url. Probably a video. Skipping")
+                        pass
+                    if "5hnl" in line:
                         #print("'5hne' is found in url. Probably a video. Skipping")
                         pass
                     else:
